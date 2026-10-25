@@ -12,10 +12,9 @@ const CAMPAIGN_BRIEFS_CHANNEL_ID = "1563713237407637574";
 
 function makeTicketName(username) {
   const prefix = "🎟️︲";
-  const suffix = "-ticket";
-  const maxUsernameLength = 100 - [...prefix].length - [...suffix].length;
+  const maxUsernameLength = 100 - [...prefix].length;
   const safeUsername = username.trim().replace(/\s+/g, "-") || "member";
-  return `${prefix}${[...safeUsername].slice(0, maxUsernameLength).join("")}${suffix}`;
+  return `${prefix}${[...safeUsername].slice(0, maxUsernameLength).join("")}`;
 }
 
 function findWildcardEmoji(guild) {

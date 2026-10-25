@@ -36,9 +36,9 @@ function buildTicketWelcomeEmbed(guild, fullName) {
         "",
         `📖 Start by reading the briefs of the campaign(s) that catch your interest in <#${CAMPAIGN_BRIEFS_CHANNEL_ID}>.`,
         "",
-        "🧰In the same channel, make sure you get the role(s) for the corresponding campaign.",
+        "🧰 In the same channel, make sure you get the role(s) for the corresponding campaign.",
         "",
-        `Any questions along the way? Just tag <@${WILDCARD_STAFF_ID}> in here and someone will get back to you. 🙌`,
+        `Any questions along the way? Just tag <@&${WILDCARD_STAFF_ID}> in here and someone will get back to you. 🙌`,
       ].join("\n"),
     );
 }

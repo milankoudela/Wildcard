@@ -1,5 +1,10 @@
 import "dotenv/config";
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import {
+  Client,
+  Events,
+  GatewayIntentBits,
+  Partials,
+} from "discord.js";
 import { commands } from "./commands.js";
 import {
   ONBOARDING_BUTTON_ID,
@@ -7,6 +12,7 @@ import {
   handleOnboardingButton,
   handleOnboardingModal,
 } from "./onboarding.js";
+import { handleReactionRoleEvent } from "./reaction-roles.js";
 
 const { DISCORD_TOKEN, GUILD_ID } = process.env;
 
@@ -15,7 +21,17 @@ if (!DISCORD_TOKEN || !GUILD_ID) {
 }
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessageReactions,
+  ],
+  partials: [
+    Partials.Channel,
+    Partials.Message,
+    Partials.Reaction,
+    Partials.User,
+  ],
 });
 const commandByName = new Map(
   commands.map((command) => [command.data.name, command]),
@@ -35,6 +51,22 @@ client.on(Events.GuildMemberAdd, async (member) => {
     );
   } catch (error) {
     console.error("Failed to send the new-member greeting:", error);
+  }
+});
+
+client.on(Events.MessageReactionAdd, async (reaction, user) => {
+  try {
+    await handleReactionRoleEvent(reaction, user, GUILD_ID, "add");
+  } catch (error) {
+    console.error("Failed to assign a reaction role:", error);
+  }
+});
+
+client.on(Events.MessageReactionRemove, async (reaction, user) => {
+  try {
+    await handleReactionRoleEvent(reaction, user, GUILD_ID, "remove");
+  } catch (error) {
+    console.error("Failed to remove a reaction role:", error);
   }
 });
 

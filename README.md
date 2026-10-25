@@ -22,9 +22,9 @@ tickets, and includes a sample `/ping` command.
    **Server Members Intent**. The bot uses this to detect new members.
 5. Invite the bot to the target server using the OAuth2 URL generator with the
    `bot` and `applications.commands` scopes. The bot needs permission to view
-   channels, send messages, manage channels, and manage roles. Its highest role
-   must be above access role `1563677636654407841` so it can assign that role
-   after onboarding.
+   channels, read message history, add reactions, send messages, manage
+   channels, and manage roles. Its highest role must be above access role
+   `1563677636654407841` and any role configured for reaction roles.
 6. Install dependencies and register the slash command:
 
    ```sh
@@ -53,6 +53,14 @@ look them up privately with `/creatorinfo user:@username`. This file contains
 personal data in plain text, is stored on the machine running the bot, and is
 excluded from Git. Back it up securely if you need to preserve creator records
 when moving or restoring the bot.
+
+Administrators can configure a reaction role with `/reaction-role`, providing
+the message ID, role ID, and a Unicode emoji or custom emoji such as
+`<:name:id>`. The bot searches accessible text channels in the configured
+server, adds the reaction to the message, assigns the role when a member reacts,
+and removes the role if they remove the reaction. Rules are saved in
+`data/reaction-roles.json` and are excluded from Git; keep this file with the
+bot when moving or restoring it.
 
 If the server has a custom emoji named `wildcard`, it is used in the embed
 titles. Otherwise the titles display the literal `:wildcard:` placeholder.

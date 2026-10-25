@@ -1,7 +1,8 @@
 # Private Discord bot
 
-A minimal Node.js bot intended for one Discord server. It uses guild-only slash
-command registration and includes a sample `/ping` command.
+A minimal Node.js bot intended for one Discord server. It greets new members,
+uses guild-only slash command registration, and includes a sample `/ping`
+command.
 
 ## Requirements
 
@@ -17,25 +18,29 @@ command registration and includes a sample `/ping` command.
    - `DISCORD_TOKEN`: the bot token
    - `CLIENT_ID`: the application ID
    - `GUILD_ID`: the target server ID
-4. Invite the bot to the target server using the OAuth2 URL generator with the
-   `bot` and `applications.commands` scopes. The bot needs no privileged
-   gateway intents for this starter.
-5. Install dependencies and register the slash command:
+4. In the Developer Portal, open **Bot → Privileged Gateway Intents** and enable
+   **Server Members Intent**. The bot uses this to detect new members.
+5. Invite the bot to the target server using the OAuth2 URL generator with the
+   `bot` and `applications.commands` scopes. Grant it permission to send
+   messages in the greeting channel.
+6. Install dependencies and register the slash command:
 
    ```sh
    npm install
    npm run deploy-commands
    ```
 
-6. Start the bot:
+7. Start the bot:
 
    ```sh
    npm start
    ```
 
-The bot checks that it can access the configured server at startup and ignores
-slash commands invoked in any other server. Keep `.env` private; never share or
-commit the bot token.
+When someone joins the configured server, the bot posts a welcome message in
+channel `1563620140749430894` and directs them to onboarding in
+`1563620042841661644`. The bot checks that it can access the configured server
+at startup and ignores slash commands invoked in any other server. Keep `.env`
+private; never share or commit the bot token.
 
 ## Adding a command
 

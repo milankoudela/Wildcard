@@ -8,10 +8,29 @@ if (!DISCORD_TOKEN || !GUILD_ID) {
   throw new Error("Set DISCORD_TOKEN and GUILD_ID in your .env file.");
 }
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+});
 const commandByName = new Map(
   commands.map((command) => [command.data.name, command]),
 );
+
+client.on(Events.GuildMemberAdd, async (member) => {
+  if (member.guild.id !== GUILD_ID) return;
+
+  try {
+    const channel = await client.channels.fetch("1563620140749430894");
+    if (!channel?.isTextBased() || channel.isDMBased()) {
+      throw new Error("Configured greeting channel is not a server text channel.");
+    }
+
+    await channel.send(
+      `Welcome to Wildcard, <@${member.id}>! Head to <#1563620042841661644> and click **Start onboarding** to register for campaigns.`,
+    );
+  } catch (error) {
+    console.error("Failed to send the new-member greeting:", error);
+  }
+});
 
 client.once(Events.ClientReady, async (readyClient) => {
   try {

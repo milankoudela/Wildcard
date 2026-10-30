@@ -1,19 +1,8 @@
+import { getEmojiKey } from "./emoji.js";
 import { getReactionRole } from "./reaction-role-store.js";
 
-export async function handleReactionRoleEvent(reaction, user, guildId, action) {
-  if (user.bot) return;
-
-  if (reaction.partial) {
-    reaction = await reaction.fetch();
-  }
-
-  const message = reaction.message.partial
-    ? await reaction.message.fetch()
-    : reaction.message;
-  if (!message?.guildId || message.guildId !== guildId) return;
-
-  const emojiKey = reaction.emoji.id ?? reaction.emoji.name;
-  const rule = await getReactionRole(guildId, message.id, emojiKey);
+export async function handleReactionRoleEvent(reaction, message, user, guildId, action) {
+  const rule = await getReactionRole(guildId, message.id, getEmojiKey(reaction.emoji));
   if (!rule) return;
 
   const member = await message.guild.members.fetch(user.id);
